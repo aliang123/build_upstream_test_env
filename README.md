@@ -29,4 +29,4 @@ Upstream_test.py: a script to build upstream env for qemu tests.
 
 Note: \
 before you use --source=gmail, create a credentials.json firstly, as in https://developers.google.com/gmail/api/quickstart/python \
-before you use --source=jira, replace the JIRA_ACCESS_TOKEN with your own token
+before you use --source=jira, replace the JIRA_ACCESS_TOKEN with your own jira token
