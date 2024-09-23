@@ -27,6 +27,6 @@ Upstream_test.py: a script to build upstream env for qemu tests.
 ### run tests with the latest upstream patch that provided labels in gmail
 #python3 Upstream_test.py --source=gmail --label=qemu-devel
 
-Note:
-####before you use --source=gmail, create a credentials.json firstly, as in https://developers.google.com/gmail/api/quickstart/python
-####before you use --source=jira, replace the JIRA_ACCESS_TOKEN with your own token
+Note: \
+before you use --source=gmail, create a credentials.json firstly, as in https://developers.google.com/gmail/api/quickstart/python \
+before you use --source=jira, replace the JIRA_ACCESS_TOKEN with your own token
