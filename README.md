@@ -16,7 +16,7 @@ Upstream_test.py: a script to build upstream env for qemu tests.
 #python3 Upstream_test.py --encrypt=yes
 
 # run tests with upstream patch that provided via patch_id
-#python3 Upstream_test.py --patch_id=20240911132630.461-1-zhiwei_liu@linux.alibaba.com
+#python3 Upstream_test.py --patch_id=20240911132630.461-1-XX@linux.rsss.com
 
 # run tests with upstream patch that provided in a jira issues's comment
 #python3 Upstream_test.py --source=jira --jira_id=RHEL-39948
