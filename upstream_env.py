@@ -280,8 +280,8 @@ if __name__ == "__main__":
     parser.add_argument("--source", default=None, help="test patch from jira issue or from mail")
     parser.add_argument("--jira_id", default=None,
             help=("the jira_id that needs upstream test."))
-    parser.add_argument("--label", default=None, help="gmail label where you what to get the patch")
-    parser.add_argument("--tag", default="qemu-devel@nongnu.org", help="gmail tag where you what to get the patch")
+    parser.add_argument("--label", default=None, help="gmail label where you want to get the patch")
+    parser.add_argument("--tag", default="qemu-devel@nongnu.org", help="gmail tag where you want to get the patch")
     parser.add_argument("--patch_id", default=None, help="patch id that needed to apply")
     config_args = vars(parser.parse_args())
     main(config_args)
