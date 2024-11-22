@@ -5,6 +5,7 @@ import re
 import json
 import subprocess
 import argparse
+import time
 
 QUIET = False
 LOG_LVL = 4
@@ -170,7 +171,7 @@ def build_qemu_pkg(aio=None, encrypt=None):
         os.system("mkdir build")
     os.chdir(os.getcwd() + "/build")
     _log_info("Build qemu package...")
-    build_cmd = "../configure --target-list=x86_64-softmmu --enable-debug"
+    build_cmd = "../configure --target-list=x86_64-softmmu --enable-debug --enable-kvm --enable-seccomp --enable-slirp --enable-vnc"
     download_pkg = ""
     if aio == "io_uring":
         download_pkg = "liburing-devel"
@@ -188,8 +189,10 @@ def build_qemu_pkg(aio=None, encrypt=None):
     os.system("make")
     os.system("make install")
     _log_info("Link qemu-system-x86_64 to qemu-kvm")
-    os.system("rm /usr/libexec/qemu-kvm")
+    os.system("rm -f /usr/libexec/qemu-kvm")
+    time.sleep(30)
     os.system("ln -s /usr/local/bin/qemu-system-x86_64 /usr/libexec/qemu-kvm")
+    time.sleep(30)
 
 def get_os_release():
     res = subprocess.getoutput("cat /etc/os-release")
@@ -227,7 +230,9 @@ def install_deps(source=None):
     "libtool",
     "make",
     "ninja-build",
-    "b4"
+    "b4",
+    "libseccomp-devel",
+    "pixman-devel"
     )
     for rpm in RPM_REQS:
         if os.system("rpm -q %s" % rpm)!= 0:
