@@ -196,10 +196,9 @@ def build_qemu_pkg(aio=None, encrypt=None):
 
 def get_os_release():
     res = subprocess.getoutput("cat /etc/os-release")
-    pattern = 'VERSION_ID="(\d).(\d)"'
-    match = re.search(pattern, res)
+    match = re.search(r'\d+', res).group()
     if match:
-        return match.group(1)
+        return match
 
 def pkg_in_pip_lists(pkg):
     output = subprocess.getoutput("pip list")
