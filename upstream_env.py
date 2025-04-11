@@ -171,7 +171,9 @@ def build_qemu_pkg(aio=None, encrypt=None):
         os.system("mkdir build")
     os.chdir(os.getcwd() + "/build")
     _log_info("Build qemu package...")
-    build_cmd = "../configure --target-list=x86_64-softmmu --enable-debug --enable-kvm --enable-seccomp --enable-slirp --enable-vnc"
+    #fix me when epel repo is avaliable for slirp dependence
+    build_cmd = "../configure --target-list=x86_64-softmmu --enable-debug --enable-kvm --enable-seccomp --enable-vnc"
+    #build_cmd = "../configure --target-list=x86_64-softmmu --enable-debug --enable-kvm --enable-seccomp --enable-slirp --enable-vnc"
     download_pkg = ""
     if aio == "io_uring":
         download_pkg = "liburing-devel"
@@ -255,6 +257,9 @@ def install_upstream_qemu(aio=None, encrypt=None, source=None, jira_id=None, lab
             _log_error("Failed to install git related packages.")
     _log_info("Clone upstream qemu repo.")
     os.system("rm -rf qemu*")
+    #add export_cmd to avoid failing to download qemu for bad network
+    export_cmd = "export https_proxy=http://squid.corp.redhat.com:3128"
+    os.system(export_cmd)
     download_qemu = "git clone https://gitlab.com/qemu-project/qemu.git"
     if os.system(download_qemu) != 0:
         _log_error("Failed to clone qemu repo.")
