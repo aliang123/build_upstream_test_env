@@ -164,7 +164,7 @@ def apply_patch(source=None, jira_id=None, label=None, tag=None, msg_id=None):
     mbox = result.split("\n")[-1].strip()
     os.system(mbox)
 
-def build_qemu_pkg(aio=None, encrypt=None):
+def build_qemu_pkg(aio=None, encrypt=None, proxy=None):
     if "/qemu" not in os.getcwd():
         os.chdir(os.getcwd() + "/qemu")
     if not os.path.exists("build"):
@@ -249,21 +249,22 @@ def install_deps(source=None):
         os.system("pip install --upgrade jira")
 
 
-def install_upstream_qemu(aio=None, encrypt=None, source=None, jira_id=None, label=None, tag=None, patch_id=None):
+def install_upstream_qemu(aio=None, encrypt=None, source=None, jira_id=None, label=None, tag=None, patch_id=None, proxy=None):
     if os.system("rpm -q git") !=0:
         if os.system("yum install -y git") != 0:
             _log_error("Failed to install git related packages.")
     _log_info("Clone upstream qemu repo.")
     os.system("rm -rf qemu*")
     #add export_cmd to avoid failing to download qemu for bad network
-    export_cmd = "export https_proxy=http://squid.corp.redhat.com:3128"
-    os.system(export_cmd)
+    if proxy:
+        export_cmd = "export %s" % proxy
+        os.system(export_cmd)
     download_qemu = "git clone https://gitlab.com/qemu-project/qemu.git"
     if os.system(download_qemu) != 0:
         _log_error("Failed to clone qemu repo.")
     if source or patch_id:
         apply_patch(source, jira_id, label, tag, patch_id)
-    build_qemu_pkg(aio, encrypt)
+    build_qemu_pkg(aio, encrypt, proxy)
 
 def main(argv):
     try:
@@ -274,9 +275,10 @@ def main(argv):
         label = argv.get("label", None)
         tag = argv.get("tag", "qemu-devel@nongnu.org")
         patch_id = argv.get("patch_id", None)
+        proxy = argv.get("net_proxy", None)
         add_ca_certificates()
         install_deps(source)
-        install_upstream_qemu(aio, encrypt, source, jira_id, label, tag, patch_id)
+        install_upstream_qemu(aio, encrypt, source, jira_id, label, tag, patch_id, proxy)
     except Exception as e:
         _log_error(str(e))
 
@@ -290,5 +292,6 @@ if __name__ == "__main__":
     parser.add_argument("--label", default=None, help="gmail label where you want to get the patch")
     parser.add_argument("--tag", default="qemu-devel@nongnu.org", help="gmail tag where you want to get the patch")
     parser.add_argument("--patch_id", default=None, help="patch id that needed to apply")
+    parser.add_argument("--net_proxy", default=None, help="network proxy for bad network")
     config_args = vars(parser.parse_args())
     main(config_args)
