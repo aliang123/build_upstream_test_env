@@ -171,10 +171,8 @@ def build_qemu_pkg(aio=None, encrypt=None):
         os.system("mkdir build")
     os.chdir(os.getcwd() + "/build")
     _log_info("Build qemu package...")
-    #fix me when epel repo is avaliable for slirp dependence
-    build_cmd = "../configure --target-list=x86_64-softmmu --enable-debug --enable-kvm --enable-seccomp --enable-vnc"
-    #build_cmd = "../configure --target-list=x86_64-softmmu --enable-debug --enable-kvm --enable-seccomp --enable-slirp --enable-vnc"
-    download_pkg = ""
+    build_cmd = "../configure --target-list=x86_64-softmmu --enable-debug --enable-kvm --enable-seccomp --enable-slirp --enable-vnc"
+    download_pkg = "libslirp-devel"
     if aio == "io_uring":
         download_pkg = "liburing-devel"
         build_cmd = "../configure --target-list=x86_64-softmmu --enable-debug --enable-linux-io-uring"
